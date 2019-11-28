@@ -27,10 +27,28 @@ RUN yum install -y \
       https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 RUN	yum update -y &&\
     yum install -y make automake mingw64-gcc mingw32-gcc gcc gcc-c++ zlib.i686 \
-		  /tmp/*.rpm
+		  libxml2 openssl libxslt ncurses-libs.i686 xmlsec1-openssl /tmp/*.rpm
 
 # Fix the "windres" not found problem
 RUN ln -s /usr/bin/x86_64-w64-mingw32-windres /usr/bin/windres
+
+# ACBr project use these symlinks 
+WORKDIR /lib64
+RUN test -e libxmlsec1.so \
+    || ln -s libxmlsec1.so.1 libxmlsec1.so
+RUN test -e libxmlsec1-openssl.so \
+                || ln -s libxmlsec1-openssl.so.1 libxmlsec1-openssl.so
+RUN test -e libxslt.so \
+                || ln -s libxslt.so.1 libxslt.so
+RUN test -e libxml2.so \
+                || ln -s libxml2.so.2 libxml2.so
+RUN test -e libexslt.so \
+                || ln -s libexslt.so.0 libexslt.so
+RUN test -e libssl.so \
+                || ln -s libssl.so.1.0.2 libssl.so
+RUN test -e libcrypto.so \
+                || ln -s libcrypto.so.1.0.2 libcrypto.so
+RUN /sbin/ldconfig
 
 # Build compilers for another archtecture
 WORKDIR /usr/share/fpcsrc/3.0.4
