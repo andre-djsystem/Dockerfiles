@@ -13,7 +13,7 @@ Arguments:
 * Download all sources in a directory:
 ```
 # Make a directory first
-make -p $HOME/docker/beloved_directory
+mkdir -p $HOME/docker/beloved_directory
 
 # Then download the sources
 curl -L 'https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20x86_64%20RPM/Lazarus%201.8.4/fpc-3.0.4-1.x86_64.rpm'\
