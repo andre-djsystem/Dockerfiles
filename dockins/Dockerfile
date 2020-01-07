@@ -1,6 +1,18 @@
 FROM jenkins/jenkins:lts
 
+# necessário porque a imagem do jenkins usa o usuário jenkins como padrão
 USER root
+# Metadados da imagem 
+LABEL maintainer="tiagomunhoz@djsystem.com.br"
+ARG BUILD_DATE
+ARG COMMIT
+ARG VERSION
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name="front-compiler" \
+      org.label-schema.description="Baseada na imagem original do jenkins com debian, contém o docker e docker-compose no modo docker-in-docker" \
+      org.label-schema.version=$VERSION \
+      org.label-schema.commit="$COMMIT" \
+      org.label-schema.schema-version="1.1"
 
 # Setting MY timezone
 ARG TZ=America/Sao_Paulo
@@ -23,10 +35,8 @@ RUN apt-get update && \
 		apt-key add /tmp/dkey && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $(lsb_release -cs) stable" && \
     apt-get update && \
-    apt-get -y install docker-ce
-
-# Housekeeping
-RUN rm -rf /var/lib/apt/lists/* /tmp/dkey
+    apt-get -y install docker-ce docker-compose &&\
+		rm -rf /var/lib/apt/lists/* /tmp/dkey
 
 # Back in to a non root user
 USER jenkins
