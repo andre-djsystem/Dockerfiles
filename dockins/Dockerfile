@@ -35,7 +35,7 @@ RUN apt-get update && \
 		apt-key add /tmp/dkey && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $(lsb_release -cs) stable" && \
     apt-get update && \
-    apt-get -y install docker-ce &&\
+    apt-get -y install docker-ce jq &&\
 		rm -rf /var/lib/apt/lists/* /tmp/dkey
 
 # Installing a new fresh docker-compose that support version 3 yml file
