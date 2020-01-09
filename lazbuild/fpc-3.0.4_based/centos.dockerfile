@@ -1,6 +1,18 @@
 FROM centos:7
 LABEL maintainer 'Tiago Tarifa Munhoz <tiagomunhoz@djsystem.com.br>'
 
+# Metadados da imagem 
+LABEL author="Tiago Tarifa Munhoz <tiagomunhoz@djsystem.com.br>"
+ARG BUILD_DATE
+ARG COMMIT
+ARG VERSION
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name="lazbuild cross-compiler" \
+      org.label-schema.description="It's compile a lazarus/freepascal project for linux and windows x86 and x86_64" \
+      org.label-schema.version=$VERSION \
+      org.label-schema.commit="$COMMIT" \
+      org.label-schema.schema-version="1.0"
+
 # Where the sources came from
 ARG DirSrc=./sources
 
@@ -18,16 +30,22 @@ RUN printf '#!/bin/bash\nld -A elf32-i386 $@\n' > /usr/bin/i386-linux-ld &&\
 		printf '#!/bin/bash\nas --32 $@\n' > /usr/bin/i386-linux-as &&\
 		chmod +x /usr/bin/i386-linux-as /usr/bin/i386-linux-ld 
 
-# Sources and compiler of FreePascal
-COPY $DirSrc/fpc-3.0.4-1.x86_64.rpm /tmp
-COPY $DirSrc/fpc-src-3.0.4-1.x86_64.rpm /tmp
-
 # Install all needed packages, including FreePascal
 RUN yum install -y \
-      https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-RUN	yum update -y &&\
+      https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm &&\
+		yum update -y &&\
     yum install -y make automake mingw64-gcc mingw32-gcc gcc gcc-c++ zlib.i686 \
-		  libxml2 openssl libxslt ncurses-libs.i686 xmlsec1-openssl /tmp/*.rpm
+		  libxml2 openssl libxslt ncurses-libs.i686 xmlsec1-openssl \
+			https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20x86_64%20RPM/Lazarus%201.8.4/fpc-src-3.0.4-1.x86_64.rpm \
+			https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20x86_64%20RPM/Lazarus%201.8.4/fpc-3.0.4-1.x86_64.rpm &&\
+		yum clean all &&\
+    find /usr/share/doc -type f -delete &&\
+    find /usr/share/licenses -type f -delete &&\
+		rm -f /tmp/*.rpm \
+		      /tmp/*.tar.gz \
+					/tmp/*.log \
+					/usr/share/fpcsrc/3.0.4/compiler/*.exe
+
 
 # Fix the "windres" not found problem
 RUN ln -s /usr/bin/x86_64-w64-mingw32-windres /usr/bin/windres
@@ -75,15 +93,6 @@ WORKDIR /usr/lib64/lazarus
 RUN make clean &&\
     make lazbuild &&\
 		ln -s "$PWD/lazbuild" /usr/bin/lazbuild
-
-# Housekeeping
-RUN yum clean all &&\
-    find /usr/share/doc -type f -delete &&\
-    find /usr/share/licenses -type f -delete &&\
-		rm -f /tmp/*.rpm \
-		      /tmp/*.tar.gz \
-					/tmp/*.log \
-					/usr/share/fpcsrc/3.0.4/compiler/*.exe
 
 USER pascal
 WORKDIR /home/pascal
