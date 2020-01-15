@@ -35,7 +35,7 @@ RUN printf '#!/bin/bash\nld -A elf32-i386 $@\n' > /usr/bin/i386-linux-ld &&\
 RUN zypper addrepo -G 'https://download.opensuse.org/repositories/windows:mingw:win32/openSUSE_Leap_15.1/windows:mingw:win32.repo' &&\
 		zypper addrepo -G 'https://download.opensuse.org/repositories/windows:mingw:win64/openSUSE_Leap_15.1/windows:mingw:win64.repo' &&\
 		zypper --non-interactive in --allow-unsigned-rpm make automake \
-		  mingw32-cross-gcc mingw64-cross-gcc zlib libxml2 \
+		  mingw32-cross-gcc mingw64-cross-gcc zlib libxml2 binutils \
 			openssl libxslt libncurses6 libxmlsec1-openssl1 mingw64-gcc \
 			libopenssl1_0_0 libXtst6 gdk-pixbuf-devel atk-devel cairo-devel \
 			libX11-devel gtk2-devel glib2-devel pango-devel libgdk_pixbuf-2_0-0 \
