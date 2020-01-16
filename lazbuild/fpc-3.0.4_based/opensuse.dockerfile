@@ -84,22 +84,23 @@ RUN ln -s /usr/bin/x86_64-w64-mingw32-windres /usr/bin/windres
 # ACBr project use these symlinks 
 WORKDIR /usr/lib64
 RUN test -e libxmlsec1.so \
-    || ln -s libxmlsec1.so.1 libxmlsec1.so
-RUN test -e libxmlsec1-openssl.so \
-                || ln -s libxmlsec1-openssl.so.1 libxmlsec1-openssl.so
-RUN test -e libxslt.so \
-                || ln -s libxslt.so.1 libxslt.so
-RUN test -e libxml2.so \
-                || ln -s libxml2.so.2 libxml2.so
-RUN test -e libexslt.so \
-                || ln -s libexslt.so.0 libexslt.so
-RUN test -e libssl.so \
-                || ln -s libssl.so.1.0.2 libssl.so
-RUN test -e libcrypto.so \
-                || ln -s libcrypto.so.1.0.2 libcrypto.so
-RUN /sbin/ldconfig
+      || ln -s libxmlsec1.so.1 libxmlsec1.so &&\
+    test -e libxmlsec1-openssl.so \
+      || ln -s libxmlsec1-openssl.so.1 libxmlsec1-openssl.so &&\
+    test -e libxslt.so \
+      || ln -s libxslt.so.1 libxslt.so &&\
+    test -e libxml2.so \
+      || ln -s libxml2.so.2 libxml2.so &&\
+    test -e libexslt.so \
+      || ln -s libexslt.so.0 libexslt.so &&\
+    test -e libssl.so \
+      || ln -s libssl.so.1.0.2 libssl.so &&\
+    test -e libcrypto.so \
+      || ln -s libcrypto.so.1.0.2 libcrypto.so &&\
+    /sbin/ldconfig
 
 # Build compilers for another archtecture
+ADD "$DirSrc"/fpc.cfg /etc
 WORKDIR /usr/share/fpcsrc/3.0.4
 # Linux i386
 RUN make build CPU_TARGET=i386 INSTALL_PREFIX=/usr &&\
@@ -113,6 +114,8 @@ RUN make build OS_TARGET=win64 CPU_TARGET=x86_64 INSTALL_PREFIX=/usr &&\
 RUN make build OS_TARGET=win32 CPU_TARGET=i386 INSTALL_PREFIX=/usr &&\
     make crossinstall OS_TARGET=win32 CPU_TARGET=i386 INSTALL_PREFIX=/usr &&\
 		make clean
+RUN ln -s /usr/lib/fpc/3.0.4/ppcross386 /usr/bin/ppcross386 &&\
+    ln -s /usr/lib/fpc/3.0.4/ppcrossx64 /usr/bin/ppcrossx64
 
 # Install Lazarus sources and compile the Lazbuild
 ARG LazSrc=lazarus-1.8.4.tar.gz

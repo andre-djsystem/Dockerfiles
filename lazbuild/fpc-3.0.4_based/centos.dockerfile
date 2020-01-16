@@ -82,6 +82,8 @@ RUN make build OS_TARGET=win64 CPU_TARGET=x86_64 INSTALL_PREFIX=/usr &&\
 RUN make build OS_TARGET=win32 CPU_TARGET=i386 INSTALL_PREFIX=/usr &&\
     make crossinstall OS_TARGET=win32 CPU_TARGET=i386 INSTALL_PREFIX=/usr &&\
 		make clean
+RUN ln -s /usr/lib/fpc/3.0.4/ppcross386 /usr/bin/ppcross386 &&\
+    ln -s /usr/lib/fpc/3.0.4/ppcrossx64 /usr/bin/ppcrossx64
 
 # Install Lazarus sources and compile the Lazbuild
 ARG LazSrc=lazarus-1.8.4.tar.gz
@@ -92,6 +94,7 @@ RUN chown root.root -R /usr/lib64/lazarus /etc/lazarus
 WORKDIR /usr/lib64/lazarus
 RUN make clean &&\
     make lazbuild &&\
+		make clean &&\
 		ln -s "$PWD/lazbuild" /usr/bin/lazbuild
 
 USER pascal
