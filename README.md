@@ -2,7 +2,19 @@
 
 ## Lazbuild for continuous integration
 
-For now, it's based only on CentOS 7 and FreePascal 3.0.4.
+It's based on CentOS 7 and OpenSuse 15.1, both using FreePascal 3.0.4 as a compiler.
+##### Only OpenSuse images support compile softwares for desktops (GUI). The main purpose of CentOS images is build daemons(services) softwre only.
+
+What a OpenSuse image can do for you:
+* Build CLI programs;
+* Build GUI programs;
+* Build for Windows or Linux, both x86 or x86_64 support;
+* Use any Lazarus version that use FreePascal 3.0.4 as a default compiler;
+
+What a CentOS image can do for you:
+* Build CLI programs only;
+* Build for Windows or Linux, both x86 or x86_64 support;
+* Use any Lazarus version that use FreePascal 3.0.4 as a default compiler;
 
 Arguments:
 * TZ: TimeZone (Default: America/Sao_Paulo);
