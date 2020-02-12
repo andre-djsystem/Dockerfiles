@@ -6,10 +6,10 @@ LABEL author="Tiago Tarifa Munhoz <tiagomunhoz@djsystem.com.br>"
 ARG BUILD_DATE
 ARG COMMIT
 ARG VERSION
-LABEL org.label-schema.build-date=$BUILD_DATE \
+LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.name="lazbuild cross-compiler" \
-      org.label-schema.description="It's compile a lazarus/freepascal project for linux and windows x86 and x86_64" \
-      org.label-schema.version=$VERSION \
+      org.label-schema.description="It's compile a lazarus/freepascal project for linux and windows x86 and x86_64. It's build automatically, it means if one image changes, all images rebuild automatically. This keep all images with same linux packages versions." \
+      org.label-schema.version="$VERSION" \
       org.label-schema.commit="$COMMIT" \
       org.label-schema.schema-version="1.0"
 
