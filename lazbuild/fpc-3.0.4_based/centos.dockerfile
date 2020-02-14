@@ -18,7 +18,7 @@ ARG DirSrc=./sources
 
 # Fix MY timezone. 
 ARG TZ=America/Sao_Paulo
-RUN ln -sfv /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime &&\
+RUN ln -sfv "/usr/share/zoneinfo/$TZ" /etc/localtime &&\
     echo "$TZ" > /etc/timezone
 
 # A non root user for compile packages
