@@ -7,10 +7,10 @@ USER root
 LABEL maintainer="tiagomunhoz@djsystem.com.br"
 ARG BUILD_DATE
 ARG COMMIT
+ARG DESCRIPTION
 ARG VERSION
 LABEL org.label-schema.build-date="$BUILD_DATE" \
-      org.label-schema.name="front-compiler" \
-      org.label-schema.description="Based on original Jenkins container, it has docker client and docker-compose." \
+      org.label-schema.description="$DESCRIPTION" \
       org.label-schema.version="$VERSION" \
       org.label-schema.commit="$COMMIT" \
       org.label-schema.schema-version="1.1"
